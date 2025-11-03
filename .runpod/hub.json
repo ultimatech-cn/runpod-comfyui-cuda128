@@ -3,7 +3,7 @@
   "description": "Custom ComfyUI environment with SDXL and Wan2.2 models, including PuLID, ReActor, and multiple LoRAs",
   "type": "serverless",
   "category": "image",
-  "iconUrl": "https://cpjrphpz3t5wbwfe.public.blob.vercel-storage.com/comfy-ui.png",
+  "iconUrl": "https://pic.imgdd.cc/item/69084cd8423b249744b5e036.jpg",
   "config": {
     "runsOn": "GPU",
     "containerDiskInGb": 80,
