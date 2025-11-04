@@ -102,9 +102,19 @@ RUN git config --global --add safe.directory '*' && \
 # Download InsightFace AntelopeV2 models (buffalo_l.zip) - special handling with unzip
 # Note: buffalo_l.zip contains buffalo_l directory with .onnx files, but PuLID expects antelopev2 directory
 RUN wget -q -O /tmp/buffalo_l.zip "https://huggingface.co/datasets/Gourieff/ReActor/resolve/main/models/buffalo_l.zip" && \
+    test -f /tmp/buffalo_l.zip || (echo "Error: Failed to download buffalo_l.zip" && exit 1) && \
     unzip -q /tmp/buffalo_l.zip -d $COMFYUI_PATH/models/insightface/models/ && \
+    echo "Contents after unzip:" && \
+    ls -la $COMFYUI_PATH/models/insightface/models/ && \
     rm -rf $COMFYUI_PATH/models/insightface/models/antelopev2 && \
-    mv $COMFYUI_PATH/models/insightface/models/buffalo_l $COMFYUI_PATH/models/insightface/models/antelopev2 && \
+    if [ -d "$COMFYUI_PATH/models/insightface/models/buffalo_l" ]; then \
+        mv $COMFYUI_PATH/models/insightface/models/buffalo_l $COMFYUI_PATH/models/insightface/models/antelopev2 && \
+        echo "Successfully renamed buffalo_l to antelopev2"; \
+    else \
+        echo "Error: buffalo_l directory not found after extraction. Contents:" && \
+        ls -la $COMFYUI_PATH/models/insightface/models/ && \
+        exit 1; \
+    fi && \
     rm /tmp/buffalo_l.zip
 
 # Download all models in optimized batches (grouped by type to optimize layer caching)
