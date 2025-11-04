@@ -150,19 +150,37 @@ Each object within the `input.images` array must contain:
 
 ## Publish to Docker Hub
 
-发布/推送镜像到 Docker Hub 的完整说明见：
+### 推荐：使用 GitHub Actions 自动化构建（推荐）
+
+使用 GitHub Actions 自动构建并推送镜像到 Docker Hub，无需本地推送大镜像。
+
+**配置步骤**：
+1. 在 Docker Hub 创建仓库（如：`robinl9527/comfyui-cuda128`）
+2. 在 GitHub 仓库配置 Secrets：
+   - `DOCKERHUB_USERNAME`: 你的 Docker Hub 用户名
+   - `DOCKERHUB_TOKEN`: Docker Hub Access Token
+3. 详细配置说明请参考：[Docker Hub 自动化构建配置指南](docs/dockerhub-setup.md)
+
+工作流会自动在以下情况触发：
+- 推送到 `main` 分支（Dockerfile 有变化时）
+- 创建新 Release 时
+- 手动在 Actions 页面触发
+
+### 本地构建和推送（备选方案）
+
+如果需要在本地构建和推送，请参考：
 
 - [docs/local-testing-and-publish.md](docs/local-testing-and-publish.md)
 
 核心命令（示例）：
 
 ```powershell
-docker build --platform linux/amd64 -t your-username/runpod-comfyui-cuda128:v1.0.0 .
-docker tag your-username/runpod-comfyui-cuda128:v1.0.0 your-username/runpod-comfyui-cuda128:latest
+docker build --platform linux/amd64 -t robinl9527/comfyui-cuda128:latest .
 docker login
-docker push your-username/runpod-comfyui-cuda128:v1.0.0
-docker push your-username/runpod-comfyui-cuda128:latest
+docker push robinl9527/comfyui-cuda128:latest
 ```
+
+**注意**：镜像大小约 92GB，本地推送可能需要数小时，且容易因网络问题失败。
 
 ## Further Documentation
 
