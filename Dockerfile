@@ -78,8 +78,8 @@ RUN git config --global --add safe.directory '*' && \
     (git clone --depth 1 https://github.com/crystian/ComfyUI-Crystools.git ComfyUI-Crystools || \
      (sleep 2 && git clone --depth 1 https://github.com/crystian/ComfyUI-Crystools.git ComfyUI-Crystools)) && \
     (cd ComfyUI-Crystools && [ ! -f requirements.txt ] || python3 -m pip install --no-cache-dir -r requirements.txt || true) && \
-    # Fix SyntaxWarning: invalid escape sequence in ComfyUI-Crystools (fix \/ to /)
-    (sed -i 's|\\/|/|g' $COMFYUI_PATH/custom_nodes/ComfyUI-Crystools/nodes/image.py 2>/dev/null || true) && \
+    # Fix SyntaxWarning: invalid escape sequence in ComfyUI-Crystools (fix \/ to / in all Python files)
+    (find $COMFYUI_PATH/custom_nodes/ComfyUI-Crystools -name "*.py" -type f -exec sed -i 's|\\/|/|g' {} \; 2>/dev/null || true) && \
     \
     # Install ComfyUI-KJNodes
     rm -rf comfyui-kjnodes && \
@@ -101,8 +101,10 @@ RUN git config --global --add safe.directory '*' && \
     cd $COMFYUI_PATH
 
 # Download InsightFace AntelopeV2 models (buffalo_l.zip) - special handling with unzip
+# Note: buffalo_l.zip contains buffalo_l directory, but PuLID expects antelopev2 directory
 RUN wget -q -O /tmp/buffalo_l.zip "https://huggingface.co/datasets/Gourieff/ReActor/resolve/main/models/buffalo_l.zip" && \
-    unzip -q /tmp/buffalo_l.zip -d $COMFYUI_PATH/models/insightface/models/ && \
+    unzip -q /tmp/buffalo_l.zip -d /tmp/ && \
+    mv /tmp/buffalo_l $COMFYUI_PATH/models/insightface/models/antelopev2 && \
     rm /tmp/buffalo_l.zip
 
 # Download all models in optimized batches (grouped by type to optimize layer caching)
