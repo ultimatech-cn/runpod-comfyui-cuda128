@@ -63,7 +63,7 @@ RUN git config --global --add safe.directory '*' && \
     \
     # Install ComfyUI-Manager
     rm -rf ComfyUI-Manager && \
-    git clone --depth 1 https://github.com/ltdrdata/ComfyUI-Manager.git ComfyUI-Manager && \
+    git clone --depth 1 https://github.com/Comfy-Org/ComfyUI-Manager.git ComfyUI-Manager && \
     (cd ComfyUI-Manager && [ ! -f requirements.txt ] || python3 -m pip install --no-cache-dir -r requirements.txt || true) && \
     \
     # Install was-node-suite-comfyui
@@ -73,8 +73,8 @@ RUN git config --global --add safe.directory '*' && \
     \
     # Install ComfyUI-Crystools
     rm -rf ComfyUI-Crystools && \
-    (git clone --depth 1 https://github.com/cubiq/ComfyUI-Crystools.git ComfyUI-Crystools || \
-     (sleep 2 && git clone --depth 1 https://github.com/cubiq/ComfyUI-Crystools.git ComfyUI-Crystools)) && \
+    (git clone --depth 1 https://github.com/crystian/ComfyUI-Crystools.git ComfyUI-Crystools || \
+     (sleep 2 && git clone --depth 1 https://github.com/crystian/ComfyUI-Crystools.git ComfyUI-Crystools)) && \
     (cd ComfyUI-Crystools && [ ! -f requirements.txt ] || python3 -m pip install --no-cache-dir -r requirements.txt || true) && \
     \
     # Install ComfyUI-KJNodes
