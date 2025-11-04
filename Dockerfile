@@ -76,6 +76,8 @@ RUN git config --global --add safe.directory '*' && \
     (git clone --depth 1 https://github.com/crystian/ComfyUI-Crystools.git ComfyUI-Crystools || \
      (sleep 2 && git clone --depth 1 https://github.com/crystian/ComfyUI-Crystools.git ComfyUI-Crystools)) && \
     (cd ComfyUI-Crystools && [ ! -f requirements.txt ] || python3 -m pip install --no-cache-dir -r requirements.txt || true) && \
+    # Fix SyntaxWarning: invalid escape sequence in ComfyUI-Crystools (fix \/ to /)
+    (sed -i 's|\\/|/|g' $COMFYUI_PATH/custom_nodes/ComfyUI-Crystools/nodes/image.py 2>/dev/null || true) && \
     \
     # Install ComfyUI-KJNodes
     rm -rf comfyui-kjnodes && \
