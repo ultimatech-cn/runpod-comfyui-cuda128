@@ -46,6 +46,10 @@ RUN mkdir -p \
 # Remove existing directories before cloning to avoid "already exists" errors
 # Configure git to avoid credential prompts and handle network issues
 RUN git config --global --add safe.directory '*' && \
+    git config --global credential.helper '' && \
+    git config --global url."https://github.com/".insteadOf git@github.com: && \
+    git config --global http.sslVerify true && \
+    git config --global http.postBuffer 524288000 && \
     cd $COMFYUI_PATH/custom_nodes && \
     # Install ComfyUI-ReActor (ReActor Face Swap)
     rm -rf ComfyUI-ReActor && \
@@ -69,7 +73,8 @@ RUN git config --global --add safe.directory '*' && \
     \
     # Install ComfyUI-Crystools
     rm -rf ComfyUI-Crystools && \
-    git clone --depth 1 https://github.com/cubiq/ComfyUI-Crystools.git ComfyUI-Crystools && \
+    (git clone --depth 1 https://github.com/cubiq/ComfyUI-Crystools.git ComfyUI-Crystools || \
+     (sleep 2 && git clone --depth 1 https://github.com/cubiq/ComfyUI-Crystools.git ComfyUI-Crystools)) && \
     (cd ComfyUI-Crystools && [ ! -f requirements.txt ] || python3 -m pip install --no-cache-dir -r requirements.txt || true) && \
     \
     # Install ComfyUI-KJNodes
