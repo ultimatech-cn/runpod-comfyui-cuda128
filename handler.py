@@ -898,11 +898,24 @@ def handler(job):
                                 # For videos, add data URI prefix similar to images
                                 if is_video:
                                     # Determine MIME type based on extension
-                                    mime_type = "video/mp4"  # default
-                                    if filename.lower().endswith('.webm'):
+                                    filename_lower = filename.lower()
+                                    if filename_lower.endswith('.mp4') or filename_lower.endswith('.m4v'):
+                                        mime_type = "video/mp4"
+                                    elif filename_lower.endswith('.webm'):
                                         mime_type = "video/webm"
-                                    elif filename.lower().endswith('.mov'):
+                                    elif filename_lower.endswith('.mov'):
                                         mime_type = "video/quicktime"
+                                    elif filename_lower.endswith('.avi'):
+                                        mime_type = "video/x-msvideo"
+                                    elif filename_lower.endswith('.mkv'):
+                                        mime_type = "video/x-matroska"
+                                    elif filename_lower.endswith('.flv'):
+                                        mime_type = "video/x-flv"
+                                    elif filename_lower.endswith('.wmv'):
+                                        mime_type = "video/x-ms-wmv"
+                                    else:
+                                        # Default fallback for unknown video formats
+                                        mime_type = "video/mp4"
                                     base64_data = f"data:{mime_type};base64,{base64_data}"
                                 
                                 # Append dictionary with filename and base64 data
