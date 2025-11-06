@@ -210,3 +210,20 @@ RUN mkdir -p $COMFYUI_PATH/models/blip && \
     BlipProcessor.from_pretrained('Salesforce/blip-vqa-base', cache_dir=blip_cache); \
     BlipForQuestionAnswering.from_pretrained('Salesforce/blip-vqa-base', cache_dir=blip_cache); \
     print('BLIP models downloaded successfully')"
+
+# Clean up build tools and caches to reduce image size
+# Remove build tools after all Python packages are installed (they're only needed for compilation)
+# Note: We keep all models and custom nodes, only removing unnecessary build dependencies
+RUN apt-get update && \
+    apt-get remove -y build-essential g++ python3-dev && \
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    # Clean Python cache
+    find /usr/local/lib/python3* -type d -name __pycache__ -exec rm -r {} + 2>/dev/null || true && \
+    find /usr/local/lib/python3* -name "*.pyc" -delete 2>/dev/null || true && \
+    find /usr/local/lib/python3* -name "*.pyo" -delete 2>/dev/null || true && \
+    # Clean pip cache (if any)
+    rm -rf /root/.cache/pip/* 2>/dev/null || true && \
+    # Clean temporary files
+    rm -rf /tmp/* /var/tmp/* 2>/dev/null || true
