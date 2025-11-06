@@ -97,6 +97,16 @@ RUN git config --global --add safe.directory '*' && \
      ([ ! -f requirements.txt ] || python3 -m pip install --no-cache-dir -r requirements.txt || true) && \
      python3 -m pip install --no-cache-dir facexlib || true) && \
     \
+    # Install comfyui-mixlab-nodes
+    rm -rf comfyui-mixlab-nodes && \
+    git clone --depth 1 https://github.com/MixLabPro/comfyui-mixlab-nodes.git comfyui-mixlab-nodes && \
+    (cd comfyui-mixlab-nodes && [ ! -f requirements.txt ] || python3 -m pip install --no-cache-dir -r requirements.txt || true) && \
+    \
+    # Install ComfyUI-Frame-Interpolation
+    rm -rf ComfyUI-Frame-Interpolation && \
+    git clone --depth 1 https://github.com/Fannovel16/ComfyUI-Frame-Interpolation.git ComfyUI-Frame-Interpolation && \
+    (cd ComfyUI-Frame-Interpolation && [ ! -f requirements.txt ] || python3 -m pip install --no-cache-dir -r requirements.txt || true) && \
+    \
     cd $COMFYUI_PATH
 
 # Download InsightFace AntelopeV2 models (antelopev2.zip)
